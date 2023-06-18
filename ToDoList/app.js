@@ -39,17 +39,20 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 app.get('/', function(req, res) {
-    Item.find().then((items) => {
+    /* Item.find().then((items) => {
         if (items.length === 0) {
             Item.insertMany(defaultItems);
             res.redirect("/");
         } else {
-            res.render("list", { listTitle: "Today", newListItems: items});
+            //res.render("list", { listTitle: "Today", newListItems: items});
         }
-    });
+    }); */
+    List.find().then((lists) => {
+        res.render("home", { lists: lists });
+    })
 });
 
-app.get("/:customListName", function(req, res) {
+app.get("/:listName", function(req, res) {
     const customListName = _.capitalize(req.params.customListName);
 
     List.findOne({name: customListName})
@@ -62,7 +65,8 @@ app.get("/:customListName", function(req, res) {
             newList.save();
             res.redirect("/" + customListName);
         } else {
-            res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+            //res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+            res.redirect("/");
         }})
         .catch((err) => {console.log(err);});
 });
@@ -72,6 +76,24 @@ app.get("/about", function(req, res) {
 });
 
 app.post("/", function(req, res) {
+    const newListName = _.capitalize(req.body.newList);
+
+    List.findOne({name: newListName}).then((foundList) => {
+        if(!foundList) {
+            let list = new List({
+                name: newListName,
+                items: defaultItems
+                });
+            list.save();
+        } else {
+            console.log("A list with that name already exists.");
+        }
+        }).catch((err) => {console.error(err)});
+
+    res.redirect("/");
+})
+
+app.post("/:listName", function(req, res) {
     const itemName = req.body.newItem;
     const listName = req.body.list;
     let item = new Item({
@@ -99,7 +121,7 @@ app.post("/delete", async function(req, res) {
         await Item.findByIdAndRemove(checkedItemId)
             .then(()=>console.log(`Deleted ${checkedItemId} Successfully`))
             .catch((err) => console.log("Deletion Error: " + err));
-        res.redirect("/");
+        res.redirect("/" + "Today");
     } else {
         List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}
             ).then((checkedItemId) => {
@@ -108,6 +130,13 @@ app.post("/delete", async function(req, res) {
         res.redirect("/" + listName);
     }
 });
+
+app.post("/delete-list", async function(req, res) {
+    const toDelete = req.body.delete;
+
+    List.findByIdAndRemove(toDelete).then(()=>console.log(`Deleted ${toDelete} Successfully`)).catch(err => console.log(err));
+    res.redirect("/");
+})
 
 app.listen(3000, function() {
     console.log("server running on port 3000");

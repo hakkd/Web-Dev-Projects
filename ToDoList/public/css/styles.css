@@ -56,12 +56,24 @@ form.item {
   margin-left: 20px;
 }
 
-button {
+.addItem {
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
   border-color: transparent;
   background-color: #4673cf;
+  color: #fff;
+  font-size: 30px;
+  padding-bottom: 6px;
+  border-width: 0;
+}
+
+.removeItem {
+  min-height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border-color: transparent;
+  background-color: #cc4232;
   color: #fff;
   font-size: 30px;
   padding-bottom: 6px;

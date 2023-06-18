@@ -39,16 +39,17 @@ const listSchema = {
 const List = mongoose.model("List", listSchema);
 
 app.get('/', function(req, res) {
-    /* Item.find().then((items) => {
-        if (items.length === 0) {
-            Item.insertMany(defaultItems);
+    List.find().then((lists) => {
+        if (lists.length === 0) {
+            const defaultList = new List({
+                name: "Today",
+                items: defaultItems,
+            });
+            defaultList.save();
             res.redirect("/");
         } else {
-            //res.render("list", { listTitle: "Today", newListItems: items});
+            res.render("home", { lists: lists });
         }
-    }); */
-    List.find().then((lists) => {
-        res.render("home", { lists: lists });
     })
 });
 
@@ -58,17 +59,11 @@ app.get("/:listName", function(req, res) {
     List.findOne({name: customListName})
         .then((foundList) => {
             if (!foundList) {
-                const newList = new List({
-                name: customListName,
-                items: defaultItems
-            });
-            newList.save();
-            res.redirect("/" + customListName);
-        } else {
-            //res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+                console.log("List not found");
             res.redirect("/");
-        }})
-        .catch((err) => {console.log(err);});
+            } else {
+                res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+            }}).catch((err) => {console.log(err);});
 });
 
 app.get("/about", function(req, res) {
@@ -102,7 +97,7 @@ app.post("/:listName", function(req, res) {
 
     if (listName === "Today") {
         item.save();
-        res.redirect("/");
+        res.redirect("/Today");
     } else {
         List.findOne({name: listName}).then((foundList) => {
             foundList.items.push(item);

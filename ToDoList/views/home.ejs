@@ -5,14 +5,14 @@
 </div>
 <div class="box">
     <% lists.forEach(function(list){ %>
-        <div class="item">
-            <form action="/<%= list.name %>" method="post">
-                <button class="btn btn-light btn-block" type="button" name="goToList" value="<%= list._id %>"><%= list.name %></button>
-            </form>
-            <form action="/delete-list" method="post"></form>
-                <button class="removeItem" type="delete" name="delete" value="<%= list._id %>">-</button>
+        
+        <div class="item vertical-menu">
+                <a href="/<%- list.name %>"><%= list.name%></a>
+            <form action="/delete-list" method="post">
+                <button class="removeItem" type="submit" name="delete" value="<%= list._id %>">-</button>
             </form>
         </div>
+          
     <% }) %>
 
     <form class="item" action="/" method="post">

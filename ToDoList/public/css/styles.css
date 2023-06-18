@@ -68,6 +68,10 @@ form.item {
   border-width: 0;
 }
 
+.addItem:hover {
+  background-color: #4674cfac;
+}
+
 .removeItem {
   min-height: 50px;
   width: 50px;
@@ -78,6 +82,24 @@ form.item {
   font-size: 30px;
   padding-bottom: 6px;
   border-width: 0;
+}
+
+.removeItem:hover {
+  background-color: #cc4132bb;
+}
+
+.go {
+  min-height: 50px;
+  width: 100px;
+  border-radius: 10%;
+  border-color: transparent;
+  background-color: #ffffff;
+  color: black;
+  font-size: 30px;
+  padding-bottom: 6px;
+  border-width: 0;
+  padding-left: 5;
+  padding-right: 5;
 }
 
 input[type="text"] {
@@ -105,4 +127,26 @@ footer {
   color: white;
   color: rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+
+.vertical-menu {
+  margin-left: 20px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.vertical-menu a {
+  background-color: #fff;
+  color: black;
+  padding: 12px;
+  margin: 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.vertical-menu a:hover {
+  background-color: #ccc;
+  /* Dark grey background on mouse-over */
 }
